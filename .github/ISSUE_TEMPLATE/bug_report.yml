@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a defect in tai-backend-celery (the Celery execution backend)
+description: Report a defect in tai42-backend-celery (the Celery execution backend)
 labels: ["bug"]
 body:
   - type: textarea
@@ -20,7 +20,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: tai-backend-celery version
+      label: tai42-backend-celery version
       placeholder: "0.1.0"
     validations:
       required: true
@@ -28,7 +28,7 @@ body:
     id: environment
     attributes:
       label: Environment
-      description: Python version, the host tai-skeleton version, the celery/redbeat/redis versions, the broker (amqp or redis), and the pool type.
+      description: Python version, the host tai42-skeleton version, the celery/redbeat/redis versions, the broker (amqp or redis), and the pool type.
       placeholder: "Python 3.13.x, macOS 15"
     validations:
       required: true

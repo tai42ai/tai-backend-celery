@@ -13,7 +13,7 @@ class ScheduleRecord(BaseModel):
     ``name`` identifies the schedule; ``args`` and ``kwargs`` are the positional
     and keyword arguments handed to the scheduled call; ``schedule`` holds the
     canonical interval-or-crontab dict that
-    :func:`tai_kit.utils.runtime.schedule_util.normalize_schedule` produces;
+    :func:`tai42_kit.utils.runtime.schedule_util.normalize_schedule` produces;
     ``enabled`` marks whether the schedule is active.
 
     ``model_dump`` yields a plain JSON-ready dict and ``model_validate`` reads

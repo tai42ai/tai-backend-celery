@@ -40,10 +40,10 @@ from contextlib import contextmanager
 from typing import Any
 
 from celery import signals
-from tai_contract.app import tai_app
+from tai42_contract.app import tai42_app
 
-from tai_backend_celery.core.app import celery_app
-from tai_backend_celery.core.settings import celery_settings
+from tai42_backend_celery.core.app import celery_app
+from tai42_backend_celery.core.settings import celery_settings
 
 logger = logging.getLogger(__name__)
 
@@ -100,7 +100,7 @@ def register() -> None:
     """
     signals.celeryd_after_setup.connect(_record_local_nodename)
     signals.worker_ready.connect(_mark_worker_ready)
-    tai_app.lifecycle.on_fleet_op_applied(_on_fleet_op_applied)
+    tai42_app.lifecycle.on_fleet_op_applied(_on_fleet_op_applied)
 
 
 def _record_local_nodename(sender: Any = None, instance: Any = None, **kwargs: Any) -> None:
@@ -230,7 +230,7 @@ def _prefork_pool_state(hostname: str) -> tuple[set[int], int] | None:
 def _refresh_manifest_env() -> None:
     """Publish the live manifest JSON into the env so the re-forked children
     inherit the current registry."""
-    os.environ[celery_settings().manifest_key] = json.dumps(tai_app.admin.live_manifest, separators=(",", ":"))
+    os.environ[celery_settings().manifest_key] = json.dumps(tai42_app.admin.live_manifest, separators=(",", ":"))
 
 
 def _restart_pool(hostname: str) -> None:

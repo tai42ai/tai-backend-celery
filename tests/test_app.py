@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
-import tai_backend_celery.core.app as app_module
-from tai_backend_celery.core.settings import celery_settings
+import tai42_backend_celery.core.app as app_module
+from tai42_backend_celery.core.settings import celery_settings
 
 
 def test_create_celery_app_wires_redbeat_and_events() -> None:

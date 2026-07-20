@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from tai_backend_celery.core.schedule import ScheduleRecord
+from tai42_backend_celery.core.schedule import ScheduleRecord
 
 
 def test_interval_record_round_trips() -> None:

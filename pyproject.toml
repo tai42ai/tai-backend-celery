@@ -3,7 +3,7 @@ requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tai-backend-celery"
+name = "tai42-backend-celery"
 version = "0.1.0"
 description = "Celery execution backend for the TAI ecosystem — worker/beat/flower runtime, prefork-pool turnover on worker-bus ops, and RedBeat scheduling."
 readme = "README.md"
@@ -24,11 +24,11 @@ classifiers = [
 ]
 dependencies = [
     # The pure interface contract — the Backend ABC, CallbackSchema field shape,
-    # Manifest, ExtensionKind, and the tai_app handle the backend registers through.
-    "tai-contract>=0.1,<0.2",
+    # Manifest, ExtensionKind, and the tai42_app handle the backend registers through.
+    "tai42-contract>=0.1,<0.2",
     # TaiBaseSettings + settings cache, pooled Redis client, schedule
     # normalization, signature helpers, and the jq compiler (callback conditions).
-    "tai-kit[jq]>=0.1,<0.2",
+    "tai42-kit[jq]>=0.1,<0.2",
     # Celery's own broker/pool machinery and its messaging layer (kombu is
     # Celery's transport library; pinned explicitly to hold the version).
     "celery~=5.6.3",
@@ -77,10 +77,10 @@ package-dir = { "" = "src" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["tai_backend_celery*"]
+include = ["tai42_backend_celery*"]
 
 [tool.setuptools.package-data]
-tai_backend_celery = ["py.typed", "tai-plugin.yml"]
+tai42_backend_celery = ["py.typed", "tai-plugin.yml"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
@@ -93,7 +93,7 @@ xfail_strict = true
 filterwarnings = ["error"]
 
 [tool.coverage.run]
-source = ["tai_backend_celery"]
+source = ["tai42_backend_celery"]
 
 [tool.coverage.report]
 fail_under = 97
@@ -101,6 +101,13 @@ fail_under = 97
 [tool.uv]
 cache-keys = [{ file = "pyproject.toml" }]
 
+
+# The version floors in [project] are the compatibility contract; these path
+# sources resolve the sibling checkouts while the packages are unpublished.
+# They are not part of wheel metadata.
+[tool.uv.sources]
+tai42-contract = { path = "../tai-contract", editable = true }
+tai42-kit = { path = "../tai-kit", editable = true }
 [tool.ruff]
 src = ["src"]
 target-version = "py313"
@@ -110,7 +117,7 @@ line-length = 120
 select = ["E", "W", "F", "I", "UP", "B", "C4", "SIM", "PIE", "PT", "RUF", "TID"]
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
-"tai_skeleton".msg = "An execution backend sits below the skeleton: it never imports tai-skeleton."
+"tai42_skeleton".msg = "An execution backend sits below the skeleton: it never imports tai42-skeleton."
 
 [tool.pyright]
 include = ["src", "tests"]

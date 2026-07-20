@@ -8,7 +8,7 @@ from typing import Any
 
 from fastmcp import Context
 
-from tai_backend_celery.core.signatures import add_signature_params, exclude_fastmcp_ctx_from_kwargs
+from tai42_backend_celery.core.signatures import add_signature_params, exclude_fastmcp_ctx_from_kwargs
 
 
 def plain_tool(a: int, b: str = "x") -> str:

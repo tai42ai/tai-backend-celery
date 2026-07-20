@@ -24,11 +24,11 @@ from typing import Any
 
 from celery import Task
 from celery.exceptions import TimeoutError as CeleryTimeoutError
-from tai_contract.app import tai_app
+from tai42_contract.app import tai42_app
 
-from tai_backend_celery.core.app import celery_app
-from tai_backend_celery.core.callback import CallbackSchema, callback_execution
-from tai_backend_celery.core.settings import celery_settings
+from tai42_backend_celery.core.app import celery_app
+from tai42_backend_celery.core.callback import CallbackSchema, callback_execution
+from tai42_backend_celery.core.settings import celery_settings
 
 # Task options every dispatching extension exposes; ``callback_kwargs`` chains a
 # follow-up tool (see ``callback_task``) via a Celery ``link`` signature.
@@ -93,7 +93,7 @@ class AsyncTask(Task):
         if loop is None or loop.is_closed():
             return
         try:
-            loop.run_until_complete(tai_app.clients.shutdown_clients())
+            loop.run_until_complete(tai42_app.clients.shutdown_clients())
         finally:
             loop.close()
 
@@ -101,7 +101,7 @@ class AsyncTask(Task):
 async def run_tool(**kwargs: Any) -> Any:
     """Pop the dispatch-injected tool name and run that tool with the rest."""
     tool_name = kwargs.pop(celery_settings().tool_name_arg)
-    return await tai_app.tools.run_tool(tool_name, kwargs)
+    return await tai42_app.tools.run_tool(tool_name, kwargs)
 
 
 @celery_app.task(

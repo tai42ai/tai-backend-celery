@@ -1,13 +1,13 @@
-# Contributing to tai-backend-celery
+# Contributing to tai42-backend-celery
 
-`tai-backend-celery` is a Celery **execution backend** for the TAI ecosystem: it
-implements `tai_contract.backend.Backend`, launching the worker runtime (`worker`
+`tai42-backend-celery` is a Celery **execution backend** for the TAI ecosystem: it
+implements `tai42_contract.backend.Backend`, launching the worker runtime (`worker`
 / `beat` / `flower`), and ships the `sync_task` / `async_task` / `schedule_task`
 tool extensions plus the `backend_*` tool surface (including the scheduling
 marker tools the host's schedules API and backup round trip depend on). The hard
-rule (the plugin rule): **it depends on `tai-contract` + `tai-kit` only and never
-imports the skeleton.** Importing `tai_backend_celery` registers everything
-through the global `tai_app` handle as a side-effect, and a manifest's
+rule (the plugin rule): **it depends on `tai42-contract` + `tai42-kit` only and never
+imports the skeleton.** Importing `tai42_backend_celery` registers everything
+through the global `tai42_app` handle as a side-effect, and a manifest's
 `backend_module` names the package. Fleet config propagation is not a backend
 concern — live-reload ops reach each worker through the skeleton's own worker bus;
 this backend's one addition on top of that is re-forking its prefork pool after a
@@ -18,7 +18,7 @@ mutating op so the children re-inherit the updated tool registry.
 - **No skeleton import — ever.** The package is contract-facing; the ban is
   enforced by ruff (`flake8-tidy-imports`), so a stray import fails lint:
   ```bash
-  grep -rn "tai_skeleton" src/   # must be empty
+  grep -rn "tai42_skeleton" src/   # must be empty
   ```
 - **No control plane in the backend.** Fleet ops arrive over the app's worker
   bus; the backend only confirms its own pool turnover on top.

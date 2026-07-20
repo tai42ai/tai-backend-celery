@@ -11,8 +11,8 @@ from typing import Any
 
 import pytest
 
-import tai_backend_celery.core.prefork as prefork
-from tai_backend_celery.core.settings import celery_settings
+import tai42_backend_celery.core.prefork as prefork
+from tai42_backend_celery.core.settings import celery_settings
 
 _HOST = "celery@node-1"
 
@@ -162,12 +162,12 @@ def test_worker_that_does_not_answer_stats_raises(monkeypatch: pytest.MonkeyPatc
 
 def test_full_turnover_refreshes_env_restarts_and_confirms(stub_app, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv(celery_settings().manifest_key, raising=False)
-    stub_app.admin.live_manifest = {"backend_module": "tai_backend_celery", "gen": 2}
+    stub_app.admin.live_manifest = {"backend_module": "tai42_backend_celery", "gen": 2}
     # Pre-state has child 111; after the restart the pool comes back as child 222.
     control = _install(monkeypatch, [_pool([111]), _pool([222])])
     prefork._turnover_local_pool("reload_config")
     # The manifest env the re-forked children inherit was refreshed from the live manifest.
-    assert os.environ[celery_settings().manifest_key] == '{"backend_module":"tai_backend_celery","gen":2}'
+    assert os.environ[celery_settings().manifest_key] == '{"backend_module":"tai42_backend_celery","gen":2}'
     # The local pool was armed for restart.
     assert control.broadcasts == [("pool_restart", [_HOST])]
 
@@ -240,7 +240,7 @@ def test_register_wires_signals_and_the_lifecycle_handler(monkeypatch: pytest.Mo
     monkeypatch.setattr(prefork.signals.celeryd_after_setup, "connect", lambda r: connected.append(r))
     monkeypatch.setattr(prefork.signals.worker_ready, "connect", lambda r: connected.append(r))
     registered: list[Any] = []
-    monkeypatch.setattr(prefork.tai_app.lifecycle, "on_fleet_op_applied", lambda f: registered.append(f))
+    monkeypatch.setattr(prefork.tai42_app.lifecycle, "on_fleet_op_applied", lambda f: registered.append(f))
     prefork.register()
     assert prefork._record_local_nodename in connected
     assert prefork._mark_worker_ready in connected

@@ -1,4 +1,4 @@
-"""The Celery :class:`~tai_contract.backend.Backend` implementation.
+"""The Celery :class:`~tai42_contract.backend.Backend` implementation.
 
 ``launch(args)`` starts the Celery runtime for this process — ``worker``,
 ``beat``, or ``flower``. The **worker** runs the Celery CLI on a worker thread so
@@ -12,7 +12,7 @@ a cold one) through ``celery.worker.state``, preserving graceful worker shutdown
 nothing else on it, and inline execution keeps Celery's native signal handling.
 
 Before starting the worker, ``launch`` registers the prefork-pool turnover (see
-:mod:`~tai_backend_celery.core.prefork`), which re-forks this worker's pool after
+:mod:`~tai42_backend_celery.core.prefork`), which re-forks this worker's pool after
 every mutating bus op so the forked children re-inherit the updated registry.
 That registration is worker-scoped: only the ``worker`` role has a pool.
 
@@ -30,17 +30,17 @@ import sys
 from collections.abc import Sequence
 from typing import Any
 
-from tai_contract.app import tai_app
-from tai_contract.backend import Backend
+from tai42_contract.app import tai42_app
+from tai42_contract.backend import Backend
 
-from tai_backend_celery.core import prefork
+from tai42_backend_celery.core import prefork
 
 logger = logging.getLogger(__name__)
 
 _LAUNCH_SUBCOMMANDS = frozenset({"worker", "beat", "flower"})
 
 # The Celery application module handed to the Celery CLI (`-A`).
-_CELERY_APP_PATH = "tai_backend_celery.core.app"
+_CELERY_APP_PATH = "tai42_backend_celery.core.app"
 
 
 def _celery_cli_main() -> None:
@@ -128,4 +128,4 @@ class CeleryBackend(Backend):
 # manifest ``backend_module`` and the decorator instantiates + installs the
 # process's single Backend. Applied as a call (not decorator syntax) so the
 # ``CeleryBackend`` symbol keeps its plain class type.
-tai_app.backends.register_backend(CeleryBackend)
+tai42_app.backends.register_backend(CeleryBackend)

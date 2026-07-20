@@ -20,9 +20,9 @@ from typing import Any
 
 from celery import Celery, signals
 from celery_pydantic import pydantic_celery
-from tai_contract.app import tai_app
+from tai42_contract.app import tai42_app
 
-from tai_backend_celery.core.settings import celery_settings
+from tai42_backend_celery.core.settings import celery_settings
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +43,7 @@ def on_worker_process_init(sender: Any = None, **kwargs: Any) -> None:
     so a child's first telemetry export may crash the child; prefer the ``solo``
     or ``threads`` pool there).
     """
-    tai_app.monitoring.active.writer.shutdown()
+    tai42_app.monitoring.active.writer.shutdown()
     logger.info("worker child %s: evicted the pre-fork monitoring client (fork-safe shutdown)", sender)
     if sys.platform == "darwin":
         logger.warning(
@@ -58,11 +58,11 @@ def on_worker_process_shutdown(sender: Any = None, **kwargs: Any) -> None:
     (they would otherwise be lost waiting for the SDK's periodic flush), then
     close each task loop's pooled clients."""
     try:
-        tai_app.monitoring.active.writer.flush()
+        tai42_app.monitoring.active.writer.flush()
     except Exception as e:
         logger.warning("Error flushing monitoring on worker child shutdown: %s", e)
 
-    from tai_backend_celery.core.tasks import callback_task, tool_execution
+    from tai42_backend_celery.core.tasks import callback_task, tool_execution
 
     for task in (tool_execution, callback_task):
         try:

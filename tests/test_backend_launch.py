@@ -8,10 +8,10 @@ import threading
 from typing import Any
 
 import pytest
-from tai_contract.backend import Backend
+from tai42_contract.backend import Backend
 
-import tai_backend_celery.core.backend as backend_module
-from tai_backend_celery.core.backend import CeleryBackend, _request_worker_shutdown
+import tai42_backend_celery.core.backend as backend_module
+from tai42_backend_celery.core.backend import CeleryBackend, _request_worker_shutdown
 
 
 def test_backend_is_registered_on_import(stub_app) -> None:
@@ -21,11 +21,11 @@ def test_backend_is_registered_on_import(stub_app) -> None:
 
 
 def test_top_package_import_is_the_whole_discovery_surface(stub_app) -> None:
-    """One ``import tai_backend_celery`` (the manifest ``backend_module``)
+    """One ``import tai42_backend_celery`` (the manifest ``backend_module``)
     registers the backend, the tool surface, and the three extensions."""
-    import tai_backend_celery
+    import tai42_backend_celery
 
-    assert tai_backend_celery.CeleryBackend is CeleryBackend
+    assert tai42_backend_celery.CeleryBackend is CeleryBackend
     for marker in (
         "backend_list_schedules",
         "backend_delete_schedule",
@@ -56,7 +56,7 @@ async def test_launch_beat_and_flower_run_inline(subcmd: str, monkeypatch: pytes
         await CeleryBackend().launch([subcmd, "--extra"])
     finally:
         sys.argv = old_argv
-    assert calls == [["celery", "-A", "tai_backend_celery.core.app", subcmd, "--extra"]]
+    assert calls == [["celery", "-A", "tai42_backend_celery.core.app", subcmd, "--extra"]]
 
 
 async def test_launch_worker_keeps_the_loop_alive(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -71,7 +71,7 @@ async def test_launch_worker_keeps_the_loop_alive(monkeypatch: pytest.MonkeyPatc
         for _ in range(3):
             await asyncio.sleep(0.01)
             assert not task.done()
-        assert sys.argv == ["celery", "-A", "tai_backend_celery.core.app", "worker"]
+        assert sys.argv == ["celery", "-A", "tai42_backend_celery.core.app", "worker"]
     finally:
         sys.argv = old_argv
         release.set()

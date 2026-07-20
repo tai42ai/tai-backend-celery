@@ -8,9 +8,9 @@ from typing import Any, ClassVar
 import pytest
 from celery.exceptions import TimeoutError as CeleryTimeoutError
 from celery.schedules import crontab, schedule
-from tai_contract.extensions import ExtensionKind
+from tai42_contract.extensions import ExtensionKind
 
-import tai_backend_celery.extensions.extensions as extensions
+import tai42_backend_celery.extensions.extensions as extensions
 
 
 def sample_tool(a: int, b: str = "x") -> str:

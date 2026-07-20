@@ -75,8 +75,8 @@ def live_worker() -> Iterator[Any]:
     the Redis broker, with the prefork-turnover signals connected. Torn down by
     requesting worker shutdown and reaping any surviving pool child."""
     import tests._live_probe as probe  # registers the probe task on celery_app
-    from tai_backend_celery.core import prefork
-    from tai_backend_celery.core.app import celery_app
+    from tai42_backend_celery.core import prefork
+    from tai42_backend_celery.core.app import celery_app
 
     celery_app.conf.update(broker_url=_BROKER, result_backend=_BROKER)
 
@@ -124,8 +124,8 @@ def live_worker() -> Iterator[Any]:
 
 
 def test_pool_child_sees_ops_only_after_turnover_confirms(live_worker: Any) -> None:
-    from tai_backend_celery.core import prefork
-    from tai_backend_celery.core.app import celery_app
+    from tai42_backend_celery.core import prefork
+    from tai42_backend_celery.core.app import celery_app
 
     probe = live_worker
 

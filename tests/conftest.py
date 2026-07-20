@@ -1,6 +1,6 @@
 """Bind a recording stub app before the plugin packages are imported.
 
-The plugin registers everything through the global ``tai_app`` handle at import
+The plugin registers everything through the global ``tai42_app`` handle at import
 time (tools, extensions, the backend class), so a stub app is bound here — at
 collection time, before any test module import — and records what was
 registered for the suite to assert on. Individual fixtures then point the
@@ -13,7 +13,7 @@ from typing import Any
 from unittest.mock import MagicMock
 
 import pytest
-from tai_contract.app import tai_app
+from tai42_contract.app import tai42_app
 
 
 class _RecordingTools:
@@ -95,7 +95,7 @@ class _StubAdmin:
     def __init__(self) -> None:
         self.calls: list[tuple[str, tuple[Any, ...]]] = []
         self.results: dict[str, Any] = {}
-        self.live_manifest: dict[str, Any] = {"backend_module": "tai_backend_celery"}
+        self.live_manifest: dict[str, Any] = {"backend_module": "tai42_backend_celery"}
 
     def _record(self, op: str, *args: Any) -> Any:
         self.calls.append((op, args))
@@ -164,13 +164,13 @@ class _StubApp:
 
 
 stub_app_instance = _StubApp()
-tai_app.bind(stub_app_instance)
+tai42_app.bind(stub_app_instance)
 
 # Import the plugin ONCE, after the stub is bound, so the import-time
 # registration side effects are recorded exactly as a host boot would fire
 # them. The single top-package import is the whole discovery surface: it must
 # register the backend, the Celery app + tasks, the tools, and the extensions.
-import tai_backend_celery  # noqa: E402,F401
+import tai42_backend_celery  # noqa: E402,F401
 
 
 @pytest.fixture
@@ -187,7 +187,7 @@ def _reset_stub_state() -> Any:
     stub_app_instance.clients.shutdown_calls = 0
     stub_app_instance.admin.calls.clear()
     stub_app_instance.admin.results.clear()
-    stub_app_instance.admin.live_manifest = {"backend_module": "tai_backend_celery"}
+    stub_app_instance.admin.live_manifest = {"backend_module": "tai42_backend_celery"}
     stub_app_instance.monitoring.reset_mock()
     stub_app_instance.config.reset_mock()
     return None

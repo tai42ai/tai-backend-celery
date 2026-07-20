@@ -33,15 +33,15 @@ from celery.schedules import crontab, schedule
 from makefun import create_function
 from pydantic_core import to_jsonable_python
 from redbeat import RedBeatSchedulerEntry
-from tai_contract.app import tai_app
-from tai_contract.extensions import ExtensionKind
-from tai_kit.utils.runtime.schedule_util import normalize_schedule
+from tai42_contract.app import tai42_app
+from tai42_contract.extensions import ExtensionKind
+from tai42_kit.utils.runtime.schedule_util import normalize_schedule
 
-from tai_backend_celery.core.app import celery_app
-from tai_backend_celery.core.callback import CallbackSchema, prepare_backend_kwargs
-from tai_backend_celery.core.settings import celery_settings
-from tai_backend_celery.core.signatures import add_signature_params
-from tai_backend_celery.core.tasks import CELERY_SCHEDULE_OPTS, CELERY_TASK_OPTS, callback_task, tool_execution
+from tai42_backend_celery.core.app import celery_app
+from tai42_backend_celery.core.callback import CallbackSchema, prepare_backend_kwargs
+from tai42_backend_celery.core.settings import celery_settings
+from tai42_backend_celery.core.signatures import add_signature_params
+from tai42_backend_celery.core.tasks import CELERY_SCHEDULE_OPTS, CELERY_TASK_OPTS, callback_task, tool_execution
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +57,7 @@ def _apply_task_opts(kwargs: dict[str, Any]) -> dict[str, Any]:
     return apply_async_opts
 
 
-@tai_app.extensions.extension(kind=ExtensionKind.BACKEND, name="sync_task")
+@tai42_app.extensions.extension(kind=ExtensionKind.BACKEND, name="sync_task")
 def sync_task(func: Callable[..., Any], name: str, description: str) -> Callable[..., Any]:
     """Branch ``func`` into ``<name>_sync_task``: dispatch and wait for the result."""
     new_name = f"{name}_sync_task"
@@ -87,7 +87,7 @@ def sync_task(func: Callable[..., Any], name: str, description: str) -> Callable
     )
 
 
-@tai_app.extensions.extension(kind=ExtensionKind.BACKEND, name="schedule_task")
+@tai42_app.extensions.extension(kind=ExtensionKind.BACKEND, name="schedule_task")
 def schedule_task(func: Callable[..., Any], name: str, description: str) -> Callable[..., Any]:
     """Branch ``func`` into ``<name>_schedule_task``: persist a RedBeat entry."""
     new_name = f"{name}_schedule_task"
@@ -142,7 +142,7 @@ def schedule_task(func: Callable[..., Any], name: str, description: str) -> Call
     )
 
 
-@tai_app.extensions.extension(kind=ExtensionKind.BACKEND, name="async_task")
+@tai42_app.extensions.extension(kind=ExtensionKind.BACKEND, name="async_task")
 def async_task(func: Callable[..., Any], name: str, description: str) -> Callable[..., Any]:
     """Branch ``func`` into ``<name>_async_task``: dispatch, return the task id."""
     new_name = f"{name}_async_task"

@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import os
 
-from tai_backend_celery.core.app import celery_app
+from tai42_backend_celery.core.app import celery_app
 
 SERVED_TOOLS: set[str] = set()
 

@@ -8,8 +8,8 @@ import logging
 
 import pytest
 
-import tai_backend_celery.core.app as app_module
-from tai_backend_celery.core.tasks import callback_task, tool_execution
+import tai42_backend_celery.core.app as app_module
+from tai42_backend_celery.core.tasks import callback_task, tool_execution
 
 
 def test_worker_process_init_evicts_monitoring_client(stub_app, monkeypatch, caplog) -> None:

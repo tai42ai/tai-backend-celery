@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from tai_backend_celery.core.settings import CelerySettings, celery_settings
+from tai42_backend_celery.core.settings import CelerySettings, celery_settings
 
 
 def test_defaults() -> None:

@@ -6,8 +6,8 @@ import sys
 
 import pytest
 
-from tai_backend_celery.core import tasks as tasks_module
-from tai_backend_celery.core.tasks import AsyncTask, prevent_celery_stream_capture, run_tool, tool_execution
+from tai42_backend_celery.core import tasks as tasks_module
+from tai42_backend_celery.core.tasks import AsyncTask, prevent_celery_stream_capture, run_tool, tool_execution
 
 
 def test_prevent_stream_capture_restores_real_fds_then_proxies() -> None:
@@ -107,8 +107,8 @@ def test_tool_execution_retry_policy() -> None:
 
 
 def test_callback_task_runs_callback_execution(stub_app) -> None:
-    from tai_backend_celery.core.callback import CallbackSchema
-    from tai_backend_celery.core.tasks import callback_task
+    from tai42_backend_celery.core.callback import CallbackSchema
+    from tai42_backend_celery.core.tasks import callback_task
 
     try:
         out = callback_task.apply(args=({"k": 3}, CallbackSchema(expr=".k * 2"))).get()

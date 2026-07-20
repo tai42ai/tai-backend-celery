@@ -8,12 +8,12 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-from tai_contract.plugins import PluginSpec
+from tai42_contract.plugins import PluginSpec
 
 _SPEC_FILENAME = "tai-plugin.yml"
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 _ROOT_SPEC = _REPO_ROOT / _SPEC_FILENAME
-_PACKAGED_SPEC = _REPO_ROOT / "src" / "tai_backend_celery" / _SPEC_FILENAME
+_PACKAGED_SPEC = _REPO_ROOT / "src" / "tai42_backend_celery" / _SPEC_FILENAME
 _PYPROJECT = _REPO_ROOT / "pyproject.toml"
 
 
@@ -45,9 +45,9 @@ def test_plugin_spec_matches_the_project_metadata():
 def test_packaged_spec_is_declared_in_package_data():
     package_data = _pyproject()["tool"]["setuptools"]["package-data"]
     declaring = [key for key, files in package_data.items() if _SPEC_FILENAME in files]
-    assert declaring == ["tai_backend_celery"], (
+    assert declaring == ["tai42_backend_celery"], (
         f"{_SPEC_FILENAME!r} must be declared under exactly the owning package "
-        f"'tai_backend_celery' in [tool.setuptools.package-data], but is declared under {declaring!r}; "
+        f"'tai42_backend_celery' in [tool.setuptools.package-data], but is declared under {declaring!r}; "
         "a wrong or missing package key means the built wheel silently omits the plugin spec"
     )
 

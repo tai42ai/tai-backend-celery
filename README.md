@@ -1,10 +1,10 @@
-# tai-backend-celery
+# tai42-backend-celery
 
 [![CI](https://github.com/tai42ai/tai-backend-celery/actions/workflows/ci.yml/badge.svg)](https://github.com/tai42ai/tai-backend-celery/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
 A Celery execution backend for the TAI ecosystem. It implements the
-`tai_contract.backend.Backend` surface — launching the worker runtime
+`tai42_contract.backend.Backend` surface — launching the worker runtime
 (`worker` / `beat` / `flower`). Fleet config propagation is not a backend
 concern: a backend-runtime process receives worker-bus ops (`reload_config`,
 `reload_mcp`, …) through the skeleton's own worker bus, exactly like a serving
@@ -31,9 +31,9 @@ documentation site covers the platform-level story:
 - Build an execution backend (author guide): https://tai42.ai/guides/authors/backend
 - Ecosystem catalog: https://tai42.ai/reference/catalog
 
-Its only tai-* dependencies are `tai-contract` (the `Backend` ABC, the
-`CallbackSchema` field shape, `Manifest`, `ExtensionKind`, and the `tai_app`
-handle) and `tai-kit` (settings base + cache, the pooled Redis client,
+Its only tai-* dependencies are `tai42-contract` (the `Backend` ABC, the
+`CallbackSchema` field shape, `Manifest`, `ExtensionKind`, and the `tai42_app`
+handle) and `tai42-kit` (settings base + cache, the pooled Redis client,
 schedule normalization, signature helpers, and the jq compiler). Beyond those
 it depends on its broker stack: `celery`, `kombu`, `celery-redbeat`, `redis`,
 `celery-pydantic`, `flower`, and `makefun` — plus `fastmcp` (the platform's
@@ -49,21 +49,21 @@ editable dependency of the environment that runs the server:
 ```bash
 git clone https://github.com/tai42ai/tai-backend-celery
 cd tai-skeleton   # or your own app checkout
-uv add --editable ../tai-backend-celery   # once published: uv add tai-backend-celery
+uv add --editable ../tai-backend-celery   # once published: uv add tai42-backend-celery
 ```
 
 ## Discovery
 
 The host discovers this backend by **importing its package** — importing
-`tai_backend_celery` registers everything through the global `tai_app` handle
+`tai42_backend_celery` registers everything through the global `tai42_app` handle
 as a side-effect (there is no entry-point): the `CeleryBackend`
-(`tai_app.backends.register_backend`), the Celery application with its
+(`tai42_app.backends.register_backend`), the Celery application with its
 pool-child fork-safety hooks, the `backend_*` tool surface, and the `sync_task`
 / `schedule_task` / `async_task` BACKEND-kind tool extensions. Name the package
 in your manifest's `backend_module` field:
 
 ```yaml
-backend_module: tai_backend_celery
+backend_module: tai42_backend_celery
 ```
 
 The worker runtime is started through the host's backend launcher with one of:

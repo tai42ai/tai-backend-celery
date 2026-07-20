@@ -8,8 +8,8 @@ from typing import Any
 
 import pytest
 
-import tai_backend_celery.core.backend as backend_module
-import tai_backend_celery.tools.tools as tools
+import tai42_backend_celery.core.backend as backend_module
+import tai42_backend_celery.tools.tools as tools
 
 
 def test_celery_cli_main_invokes_the_umbrella_command(monkeypatch: pytest.MonkeyPatch) -> None:

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from tai_backend_celery.core.callback import CallbackSchema, callback_execution, prepare_backend_kwargs
+from tai42_backend_celery.core.callback import CallbackSchema, callback_execution, prepare_backend_kwargs
 
 
 async def test_prepare_backend_kwargs_injects_tool_name() -> None:
