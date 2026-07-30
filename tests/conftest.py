@@ -19,16 +19,20 @@ from tai42_contract.app import tai42_app
 class _RecordingTools:
     def __init__(self) -> None:
         self.registered: dict[str, Any] = {}
+        self.tags: dict[str, set[str]] = {}
         self.run_tool_calls: list[tuple[str, dict[str, Any]]] = []
         self.run_tool_result: Any = None
 
     def tool(self, func: Any = None, /, *args: Any, **kwargs: Any) -> Any:
+        tags = kwargs.get("tags", set())
         if callable(func):
             self.registered[func.__name__] = func
+            self.tags[func.__name__] = tags
             return func
 
         def decorate(f: Any) -> Any:
             self.registered[f.__name__] = f
+            self.tags[f.__name__] = tags
             return f
 
         return decorate

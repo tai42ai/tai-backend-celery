@@ -50,6 +50,11 @@ def test_canonical_tool_is_registered(name, stub_app):
     assert name in stub_app.tools.registered
 
 
+@pytest.mark.parametrize("name", TASK_WORKER_TOOLS + SCHEDULE_TOOLS)
+def test_canonical_tool_is_tagged_backend(name, stub_app):
+    assert stub_app.tools.tags[name] == {"backend"}
+
+
 def test_list_failed_tasks_raises_not_implemented():
     with pytest.raises(NotImplementedError) as excinfo:
         tools.backend_list_failed_tasks()

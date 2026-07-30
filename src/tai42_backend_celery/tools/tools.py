@@ -55,14 +55,14 @@ async def _read_definition_and_membership(r: Any, schedule_key: str, entry_key: 
     return definition, member_score
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 def backend_ping_worker(worker_name: str | None = None) -> dict:
     """Ping all workers or a specific worker to check if they're alive."""
     inspect = celery_app.control.inspect([worker_name] if worker_name else None)
     return inspect.ping() or {}
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 def backend_list_active_workers() -> list:
     """Get a list of all currently connected and responsive worker names."""
     inspect = celery_app.control.inspect()
@@ -70,14 +70,14 @@ def backend_list_active_workers() -> list:
     return list(response.keys())
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 def backend_task_status(task_id: str) -> str:
     """Return the current status of a given task ID."""
     result = AsyncResult(task_id, app=celery_app)
     return result.status
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 def backend_task_result(task_id: str, timeout: float | None = None) -> Any:
     """Return the result of a completed task by ID.
 
@@ -96,7 +96,7 @@ def backend_task_result(task_id: str, timeout: float | None = None) -> Any:
         return f"Task {task_id} is not ready (status: {result.status})"
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 def backend_cancel_task(task_id: str, terminate: bool = False) -> str:
     """Revoke (cancel) a running or queued task. Optionally terminate if running."""
     result = AsyncResult(task_id, app=celery_app)
@@ -104,7 +104,7 @@ def backend_cancel_task(task_id: str, terminate: bool = False) -> str:
     return f"Task {task_id} revoked (terminate={terminate})"
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 def backend_active_tasks(worker_name: str | None = None) -> dict[str, Any]:
     """Get all currently executing tasks on the worker(s).
 
@@ -115,7 +115,7 @@ def backend_active_tasks(worker_name: str | None = None) -> dict[str, Any]:
     return inspect.active() or {}
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 def backend_reserved_tasks(worker_name: str | None = None) -> dict[str, Any]:
     """Get all reserved tasks (prefetched by a worker, not yet started).
 
@@ -126,7 +126,7 @@ def backend_reserved_tasks(worker_name: str | None = None) -> dict[str, Any]:
     return inspect.reserved() or {}
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 def backend_scheduled_tasks(worker_name: str | None = None) -> dict[str, Any]:
     """Get all scheduled tasks (waiting for ETA/countdown).
 
@@ -137,14 +137,14 @@ def backend_scheduled_tasks(worker_name: str | None = None) -> dict[str, Any]:
     return inspect.scheduled() or {}
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 def backend_registered_tasks(worker_name: str | None = None) -> dict[str, Any]:
     """Get all registered task names available to a worker."""
     inspect = celery_app.control.inspect([worker_name] if worker_name else None)
     return inspect.registered() or {}
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 def backend_worker_stats(worker_name: str | None = None) -> dict:
     """Get worker statistics and info.
 
@@ -155,14 +155,14 @@ def backend_worker_stats(worker_name: str | None = None) -> dict:
     return inspect.stats() or {}
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 def backend_worker_queues(worker_name: str | None = None) -> dict:
     """List all queues each worker is consuming from."""
     inspect = celery_app.control.inspect([worker_name] if worker_name else None)
     return inspect.active_queues() or {}
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 def backend_list_failed_tasks() -> list:
     """List failed tasks.
 
@@ -172,7 +172,7 @@ def backend_list_failed_tasks() -> list:
     raise NotImplementedError("backend 'celery' does not support backend_list_failed_tasks")
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 async def backend_delete_schedule(name: str) -> dict[str, Any]:
     """Remove a periodic task from RedBeat by its unique name."""
     settings = celery_settings()
@@ -185,7 +185,7 @@ async def backend_delete_schedule(name: str) -> dict[str, Any]:
         return {"status": "deleted", "name": name}
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 async def backend_list_schedules() -> list[dict[str, Any]]:
     """List all RedBeat schedule entries.
 
@@ -228,7 +228,7 @@ async def backend_list_schedules() -> list[dict[str, Any]]:
         return out
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 async def backend_get_schedule(name: str) -> dict[str, Any]:
     """Get RedBeat schedule 'definition' + 'meta' and current zset score for next run."""
     settings = celery_settings()
@@ -268,7 +268,7 @@ async def backend_get_schedule(name: str) -> dict[str, Any]:
         }
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 async def backend_enable_schedule(name: str) -> dict[str, Any]:
     """Enable a RedBeat schedule (sets definition.enabled=True and ensures it's in the zset)."""
     settings = celery_settings()
@@ -286,7 +286,7 @@ async def backend_enable_schedule(name: str) -> dict[str, Any]:
         return {"status": "enabled", "name": name}
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 async def backend_disable_schedule(name: str, remove_from_queue: bool = True) -> dict[str, Any]:
     """Disable a RedBeat schedule (sets definition.enabled=False). Optionally remove from zset."""
     settings = celery_settings()
@@ -305,7 +305,7 @@ async def backend_disable_schedule(name: str, remove_from_queue: bool = True) ->
         return {"status": "disabled", "name": name}
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 async def backend_run_schedule_now(name: str) -> dict[str, Any]:
     """Force a schedule to run ASAP by setting its zset score to 0 (Beat picks it up next tick).
 
@@ -322,7 +322,7 @@ async def backend_run_schedule_now(name: str) -> dict[str, Any]:
         return {"status": "queued", "name": name, "zadd_result": int(added)}
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 async def backend_schedule_exists(name: str) -> bool:
     """Return True if a RedBeat schedule entry exists."""
     settings = celery_settings()
@@ -330,7 +330,7 @@ async def backend_schedule_exists(name: str) -> bool:
         return bool(await r.exists(settings.redbeat_task_key(name)))
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 async def backend_update_schedule(
     name: str,
     new_schedule: int | float | str | dict[str, Any] | None = None,
@@ -400,7 +400,7 @@ async def backend_update_schedule(
         }
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 async def backend_export_schedules() -> list[dict[str, Any]]:
     """Export every RedBeat schedule as a portable list of ScheduleRecord dicts.
 
@@ -441,7 +441,7 @@ async def backend_export_schedules() -> list[dict[str, Any]]:
         return records
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"backend"})
 async def backend_import_schedules(schedules: list[dict[str, Any]]) -> dict[str, Any]:
     """Recreate schedules produced by ``backend_export_schedules`` as RedBeat entries.
 
